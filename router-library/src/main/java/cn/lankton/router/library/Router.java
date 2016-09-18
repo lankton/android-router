@@ -1,4 +1,4 @@
-package io.github.lankton.router.library;
+package cn.lankton.router.library;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by taofangxin on 16/9/17.
+ * Created by taofangxin on 16/9/18.
  */
-public class RouterCenter {
+public class Router {
     private static Map<String, String> map; // 记录route
     private static Map<String, String> paramMap; // 记录参数类型
 
@@ -22,7 +22,7 @@ public class RouterCenter {
         map = new HashMap<>();
         paramMap = new HashMap<>();
         try {
-            Class.forName("io.github.lankton.router.library.RouterStaticInit");
+            Class.forName("cn.lankton.router.library.RouterStaticInit");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

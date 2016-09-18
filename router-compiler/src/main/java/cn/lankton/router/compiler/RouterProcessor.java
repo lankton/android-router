@@ -1,7 +1,6 @@
 package cn.lankton.router.compiler;
 
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
@@ -25,8 +24,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
-import cn.lankton.router.annotation.Router;
-import cn.lankton.router.annotation.RouterParam;
+import cn.lankton.router.annotation.Route;
+import cn.lankton.router.annotation.RouteParam;
 
 @AutoService(Processor.class)
 public class RouterProcessor extends AbstractProcessor {
@@ -36,14 +35,13 @@ public class RouterProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        mMessager.printMessage(Diagnostic.Kind.NOTE, "process process process");
         Map<String, String> map = new HashMap<>();
         Map<String, String[]> paramMap = new HashMap<>();
-        for (Element element : roundEnv.getElementsAnnotatedWith(Router.class)) {
+        for (Element element : roundEnv.getElementsAnnotatedWith(Route.class)) {
             TypeElement typeElement = (TypeElement) element;
-            Router r = element.getAnnotation(Router.class);
+            Route r = element.getAnnotation(Route.class);
             map.put(r.value(),typeElement.getQualifiedName().toString());
-            RouterParam rp = element.getAnnotation(RouterParam.class);
+            RouteParam rp = element.getAnnotation(RouteParam.class);
             if (null != rp) {
                 paramMap.put(r.value(), rp.value());
             }
@@ -59,14 +57,12 @@ public class RouterProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> types = new LinkedHashSet<>();
-        types.add(Router.class.getCanonicalName());
-        mMessager.printMessage(Diagnostic.Kind.NOTE, "getSupportedAnnotationTypes " + Router.class.getCanonicalName());
+        types.add(Route.class.getCanonicalName());
         return types;
     }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        mMessager.printMessage(Diagnostic.Kind.NOTE, "getSupportedSourceVersion " + SourceVersion.latestSupported().toString());
         return SourceVersion.latestSupported();
     }
 
@@ -76,7 +72,6 @@ public class RouterProcessor extends AbstractProcessor {
         mFiler = processingEnv.getFiler();
         mElementUtils = processingEnv.getElementUtils();
         mMessager = processingEnv.getMessager();
-        mMessager.printMessage(Diagnostic.Kind.NOTE, "init init init");
     }
 
     private JavaFile generate(Map<String, String> map, Map<String, String[]> paramMap) {
@@ -89,7 +84,7 @@ public class RouterProcessor extends AbstractProcessor {
                     sb.append(str).append("&");
                 }
             }
-            codeBlockBuilder.addStatement("RouterCenter.add(\"" + key + "\",\"" + map.get(key) + "\",\"" + sb.toString() + "\");");
+            codeBlockBuilder.addStatement("Router.add(\"" + key + "\",\"" + map.get(key) + "\",\"" + sb.toString() + "\");");
         }
         // generate whole class
         TypeSpec finderClass = TypeSpec.classBuilder("RouterStaticInit")
@@ -98,6 +93,6 @@ public class RouterProcessor extends AbstractProcessor {
                 .build();
 
         // generate file
-        return JavaFile.builder("io.github.lankton.router.library", finderClass).build();
+        return JavaFile.builder("cn.lankton.router.library", finderClass).build();
     }
 }

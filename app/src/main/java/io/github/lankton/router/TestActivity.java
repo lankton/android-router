@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import cn.lankton.router.annotation.Router;
-import cn.lankton.router.annotation.RouterParam;
+import cn.lankton.router.annotation.Route;
+import cn.lankton.router.annotation.RouteParam;
 
 
-@Router("test")
-@RouterParam({"a=int", "b=boolean", "c=String"})
+@Route("test")
+@RouteParam({"a=int", "b=boolean", "c=String"})
 public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
