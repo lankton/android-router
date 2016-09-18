@@ -40,6 +40,10 @@ public class RouterProcessor extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(Route.class)) {
             TypeElement typeElement = (TypeElement) element;
             Route r = element.getAnnotation(Route.class);
+            if (map.containsKey(r.value())) {
+                mMessager.printMessage(Diagnostic.Kind.ERROR, "route ["+r.value()+"] has already existed" , element);
+                return true;
+            }
             map.put(r.value(),typeElement.getQualifiedName().toString());
             RouteParam rp = element.getAnnotation(RouteParam.class);
             if (null != rp) {

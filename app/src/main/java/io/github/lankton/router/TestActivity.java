@@ -10,7 +10,7 @@ import cn.lankton.router.annotation.RouteParam;
 import cn.lankton.router.library.Router;
 
 
-@Route("test")
+@Route("secondtest")
 @RouteParam({"a=int", "b=boolean", "c=String"})
 public class TestActivity extends AppCompatActivity {
     @Override

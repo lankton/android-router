@@ -8,7 +8,7 @@ import cn.lankton.router.annotation.Route;
 import cn.lankton.router.annotation.RouteParam;
 
 
-@Route("secondtest")
+@Route("test")
 public class SecondTestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
