@@ -18,7 +18,9 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String str = "TestActivity\n" + getIntent().getIntExtra("a", -1) + "\n" + getIntent().getBooleanExtra("b", false)
-                + "\n" + getIntent().getStringExtra("c");
+                + "\n" + getIntent().getStringExtra("c")
+                + "\n" + getIntent().getStringExtra("d")
+                + "\n" + getIntent().getStringExtra("e");
         ((TextView) findViewById(R.id.tv)).setText(str);
         findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
             @Override

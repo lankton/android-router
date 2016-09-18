@@ -97,8 +97,9 @@ public class Router {
                     // 没＝直接不管了
                     String[] unitStrs = str.split("=");
                     Query query = new Query();
-                    query.key = unitStrs[0];
-                    query.value = unitStrs[1];
+                    int index = str.indexOf("=");
+                    query.key = str.substring(0, index);
+                    query.value = str.substring(index + 1);
                     queries.add(query);
                 }
             }

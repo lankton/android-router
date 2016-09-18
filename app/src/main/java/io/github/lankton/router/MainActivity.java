@@ -13,6 +13,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Router.route(this, "test?a=99&b=true&c=this is from Lan&d=2333");
+        Router.route(this, "test?a=99&b=true&c=this is from Lan&d=2333&e=lan=lankton");
     }
 }
