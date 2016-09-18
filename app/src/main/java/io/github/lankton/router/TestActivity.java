@@ -2,10 +2,12 @@ package io.github.lankton.router;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import cn.lankton.router.annotation.Route;
 import cn.lankton.router.annotation.RouteParam;
+import cn.lankton.router.library.Router;
 
 
 @Route("test")
@@ -18,5 +20,11 @@ public class TestActivity extends AppCompatActivity {
         String str = "TestActivity\n" + getIntent().getIntExtra("a", -1) + "\n" + getIntent().getBooleanExtra("b", false)
                 + "\n" + getIntent().getStringExtra("c");
         ((TextView) findViewById(R.id.tv)).setText(str);
+        findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Router.route(TestActivity.this, "secondtest");
+            }
+        });
     }
 }

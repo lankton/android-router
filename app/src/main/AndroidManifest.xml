@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestActivity"/>
+        <activity android:name=".SecondTestActivity"/>
     </application>
 
 </manifest>
