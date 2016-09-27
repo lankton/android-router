@@ -72,15 +72,20 @@ public class Router {
                 }
                 for (Query query : queries) {
                     String type = typeMap.get(query.key);
-                    if ("int".equals(type)) {
-                        intent.putExtra(query.key, Integer.valueOf(query.value));
-                    } else if ("double".equals(type)) {
-                        intent.putExtra(query.key, Double.valueOf(query.value));
-                    } else if ("boolean".equals(type)){
-                        intent.putExtra(query.key, Boolean.valueOf(query.value));
-                    } else {
-                        // 剩下的全部当作String
-                        intent.putExtra(query.key, query.value);
+                    // 捕获异常， 让后面的解析继续进行
+                    try {
+                        if ("int".equals(type)) {
+                            intent.putExtra(query.key, Integer.valueOf(query.value));
+                        } else if ("double".equals(type)) {
+                            intent.putExtra(query.key, Double.valueOf(query.value));
+                        } else if ("boolean".equals(type)) {
+                            intent.putExtra(query.key, Boolean.valueOf(query.value));
+                        } else {
+                            // 剩下的全部当作String
+                            intent.putExtra(query.key, query.value);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
                 context.startActivity(intent);
