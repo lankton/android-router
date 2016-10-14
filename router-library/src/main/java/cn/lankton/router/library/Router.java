@@ -37,59 +37,66 @@ public class Router {
             return;
         }
         List<Query> queries = new ArrayList<>();
+        String pathStr = ""; // 可能存在多级路径, 打开多个界面
         if (route.contains("?")) {
             int index = route.indexOf("?");
             String queriesStr = route.substring(index + 1);
             getQueries(queriesStr, queries);
-            route = route.substring(0, index);
+            pathStr = route.substring(0, index);
         }
-        for (String key : map.keySet()) {
-            if (key.equals(route)) {
-                String value = map.get(key);
-                String paramsStr = paramMap.get(key);
-                Map<String, String> typeMap = new HashMap();
-                if (null != paramsStr && paramsStr.length() > 0) {
-                    String[] paramStrArray = paramsStr.split("&");
-                    for (String paramStr : paramStrArray) {
-                        if (paramsStr.length() > 0) {
-                            if (paramStr.contains("=")) {
-                                int index = paramStr.indexOf("=");
-                                String key1 = paramStr.substring(0, index);
-                                String value1 = paramStr.substring(index + 1);
-                                typeMap.put(key1, value1);
-                            } else {
-                                // 默认当作String
-                                typeMap.put(paramStr, "String");
+        if (null != pathStr) {
+            String[] paths = pathStr.split("/");
+            for (int i = 0; i < paths.length; i++) {
+                route = paths[i];
+                for (String key : map.keySet()) {
+                    if (key.equals(route)) {
+                        String value = map.get(key);
+                        String paramsStr = paramMap.get(key);
+                        Map<String, String> typeMap = new HashMap();
+                        if (null != paramsStr && paramsStr.length() > 0) {
+                            String[] paramStrArray = paramsStr.split("&");
+                            for (String paramStr : paramStrArray) {
+                                if (paramsStr.length() > 0) {
+                                    if (paramStr.contains("=")) {
+                                        int index = paramStr.indexOf("=");
+                                        String key1 = paramStr.substring(0, index);
+                                        String value1 = paramStr.substring(index + 1);
+                                        typeMap.put(key1, value1);
+                                    } else {
+                                        // 默认当作String
+                                        typeMap.put(paramStr, "String");
+                                    }
+                                }
                             }
                         }
-                    }
-                }
-                String cls = value;
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(context, cls));
-                if (! (context instanceof Activity)) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                }
-                for (Query query : queries) {
-                    String type = typeMap.get(query.key);
-                    // 捕获异常， 让后面的解析继续进行
-                    try {
-                        if ("int".equals(type)) {
-                            intent.putExtra(query.key, Integer.valueOf(query.value));
-                        } else if ("double".equals(type)) {
-                            intent.putExtra(query.key, Double.valueOf(query.value));
-                        } else if ("boolean".equals(type)) {
-                            intent.putExtra(query.key, Boolean.valueOf(query.value));
-                        } else {
-                            // 剩下的全部当作String
-                            intent.putExtra(query.key, query.value);
+                        String cls = value;
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(context, cls));
+                        if (!(context instanceof Activity)) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        for (Query query : queries) {
+                            String type = typeMap.get(query.key);
+                            // 捕获异常， 让后面的解析继续进行
+                            try {
+                                if ("int".equals(type)) {
+                                    intent.putExtra(query.key, Integer.valueOf(query.value));
+                                } else if ("double".equals(type)) {
+                                    intent.putExtra(query.key, Double.valueOf(query.value));
+                                } else if ("boolean".equals(type)) {
+                                    intent.putExtra(query.key, Boolean.valueOf(query.value));
+                                } else {
+                                    // 剩下的全部当作String
+                                    intent.putExtra(query.key, query.value);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        context.startActivity(intent);
+                        break;
                     }
                 }
-                context.startActivity(intent);
-                break;
             }
         }
     }
