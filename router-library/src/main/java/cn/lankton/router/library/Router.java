@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -93,6 +94,8 @@ public class Router {
                                 e.printStackTrace();
                             }
                         }
+                        // Router中结果数据清掉
+
                         context.startActivity(intent);
                         break;
                     }
@@ -118,8 +121,26 @@ public class Router {
         }
     }
 
+    static public Class<?> backFrom() {
+        return RouteResult.getInstance().backFrom();
+    }
+
+    static public Bundle getResult() {
+        return RouteResult.getInstance().getData();
+    }
+
+    static public void setResult(Bundle bundle, Class<?> backFrom) {
+        RouteResult.getInstance().setData(bundle);
+        RouteResult.getInstance().setBackFrom(backFrom);
+    }
+
+    static public void clearResult() {
+
+    }
+
     static class Query {
         String key;
         String value;
     }
+
 }

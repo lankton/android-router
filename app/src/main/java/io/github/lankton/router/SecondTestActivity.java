@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import cn.lankton.router.annotation.Route;
-import cn.lankton.router.annotation.RouteParam;
 
 
 @Route("secondtest")
