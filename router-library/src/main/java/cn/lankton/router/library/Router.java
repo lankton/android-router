@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,6 +125,11 @@ public class Router {
                     int index = str.indexOf("=");
                     query.key = str.substring(0, index);
                     query.value = str.substring(index + 1);
+                    try {
+                        query.value = URLDecoder.decode(query.value, "utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     queries.add(query);
                 }
             }

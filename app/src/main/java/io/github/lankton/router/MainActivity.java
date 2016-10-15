@@ -20,17 +20,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tv = (TextView) findViewById(R.id.tv);
 //        Router.route(this, "truetest/secondtest?a=99.3&b=true&c=this is from Lan&d=2333&e=lan=lankton");
-        Router.route(this, "truetest?a=99.3&b=true&c=this is from Lan&d=2333&e=lan=lankton");
+        Router.route(this, "truetest?a=99.3&b=true&c=this is from Lan&d=2333&e=lan%3dlankton");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Router.backFrom() != null && Router.backFrom() == TestActivity.class) {
-            int res1 = Router.getResult().getInt("res1");
-            String res2 = Router.getResult().getString("res2");
-            tv.append("\nres1:" + res1);
-            tv.append("\nres2:" + res2);
+        if (Router.backFrom() != null) {
+            if (Router.backFrom() == TestActivity.class) {
+                int res1 = Router.getResult().getInt("res1");
+                String res2 = Router.getResult().getString("res2");
+                tv.append("\nres1:" + res1);
+                tv.append("\nres2:" + res2);
+            }
         }
     }
 }
