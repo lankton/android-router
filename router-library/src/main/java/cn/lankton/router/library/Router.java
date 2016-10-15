@@ -28,6 +28,14 @@ public class Router {
             e.printStackTrace();
         }
     }
+
+    public static void addPackage(String packageName) {
+        try {
+            Class.forName(packageName + ".RouterStaticInit");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     public static void add(String route, String clazz, String paramType) {
         map.put(route, clazz);
         paramMap.put(route, paramType);
@@ -38,7 +46,7 @@ public class Router {
             return;
         }
         List<Query> queries = new ArrayList<>();
-        String pathStr = ""; // 可能存在多级路径, 打开多个界面
+        String pathStr = route; // 可能存在多级路径, 打开多个界面
         if (route.contains("?")) {
             int index = route.indexOf("?");
             String queriesStr = route.substring(index + 1);
@@ -95,7 +103,7 @@ public class Router {
                             }
                         }
                         // Router中结果数据清掉
-
+                        Router.clearResult();
                         context.startActivity(intent);
                         break;
                     }

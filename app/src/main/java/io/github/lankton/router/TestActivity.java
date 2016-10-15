@@ -22,6 +22,9 @@ public class TestActivity extends AppCompatActivity {
                 + "\n" + getIntent().getStringExtra("d")
                 + "\n" + getIntent().getStringExtra("e");
         ((TextView) findViewById(R.id.tv)).setText(str);
+
+        Router.route(this, "libone");
+
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

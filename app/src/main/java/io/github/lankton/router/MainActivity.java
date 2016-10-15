@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import cn.lankton.mytestlib.TestLibSdk;
 import cn.lankton.router.annotation.Route;
 import cn.lankton.router.library.Router;
 
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TestLibSdk.init();
         setContentView(R.layout.activity_main);
         tv = (TextView) findViewById(R.id.tv);
 //        Router.route(this, "truetest/secondtest?a=99.3&b=true&c=this is from Lan&d=2333&e=lan=lankton");

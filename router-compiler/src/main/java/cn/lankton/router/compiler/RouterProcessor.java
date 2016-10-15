@@ -1,6 +1,7 @@
 package cn.lankton.router.compiler;
 
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
@@ -25,6 +26,7 @@ import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
 import cn.lankton.router.annotation.Route;
+import cn.lankton.router.annotation.RoutePackage;
 import cn.lankton.router.annotation.RouteParam;
 
 @AutoService(Processor.class)
@@ -33,10 +35,23 @@ public class RouterProcessor extends AbstractProcessor {
     private Elements mElementUtils; //元素相关的辅助类
     private Messager mMessager; //日志相关的辅助类
 
+    private String packageName = "cn.lankton.router.library";
+    ClassName Router = ClassName.get("cn.lankton.router.library", "Router");
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Map<String, String> map = new HashMap<>();
         Map<String, String[]> paramMap = new HashMap<>();
+        int packageCount = 0;
+        for (Element element : roundEnv.getElementsAnnotatedWith(RoutePackage.class)) {
+            packageCount ++;
+            if (packageCount > 1) {
+                mMessager.printMessage(Diagnostic.Kind.ERROR, "more than one RoutePackages exist" , element);
+                return true;
+            }
+            RoutePackage rp = element.getAnnotation(RoutePackage.class);
+            packageName = rp.value();
+        }
         for (Element element : roundEnv.getElementsAnnotatedWith(Route.class)) {
             TypeElement typeElement = (TypeElement) element;
             Route r = element.getAnnotation(Route.class);
@@ -88,7 +103,7 @@ public class RouterProcessor extends AbstractProcessor {
                     sb.append(str).append("&");
                 }
             }
-            codeBlockBuilder.addStatement("Router.add(\"" + key + "\",\"" + map.get(key) + "\",\"" + sb.toString() + "\");");
+            codeBlockBuilder.addStatement("$T.add(\"" + key + "\",\"" + map.get(key) + "\",\"" + sb.toString() + "\");", Router);
         }
         // generate whole class
         TypeSpec finderClass = TypeSpec.classBuilder("RouterStaticInit")
@@ -97,6 +112,7 @@ public class RouterProcessor extends AbstractProcessor {
                 .build();
 
         // generate file
-        return JavaFile.builder("cn.lankton.router.library", finderClass).build();
+        return JavaFile.builder(packageName, finderClass)
+                .build();
     }
 }
